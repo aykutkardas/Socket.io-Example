@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <title>Socket.io | Example</title>
+    <script src="/socket.io/socket.io.js" charset="utf-8"></script>
+    <script type="text/javascript">
+        var socket = io.connect();
+
+        window.onload = function() {
+            var myCanvas = document.getElementById('mycanvas');
+            canvas = myCanvas.getContext("2d");
+
+            canvas.beginPath();
+
+
+        }
+
+        function drawing(a) {
+            var x = a.clientX;
+            var y = a.clientY;
+
+            socket.emit("gonder", {
+                "x": x,
+                "y": y
+            })
+
+            console.log(x, y);
+        }
+
+
+        socket.on("al", function(data) {
+
+            canvas.lineWidth = .3;
+            canvas.lineTo(data.x, data.y);
+            canvas.stroke();
+            console.log("socket", data.x, data.y);
+
+
+        })
+
+    </script>
+    <style>
+        canvas {
+            height: 200px;
+            width: 500px;
+            margin: auto;
+            border: 2px solid #eee;
+        }
+
+    </style>
+</head>
+
+<body>
+    <canvas onmousemove="drawing(event)" id="mycanvas"></canvas>
+</body>
+
+</html>
